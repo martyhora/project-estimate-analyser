@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Project Estimate Analyser</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="dist/css/app.css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+<div id="app">
+    <div class="wrapper">
+
+        <header class="main-header">
+
+            <a href="" class="logo">
+
+                <span class="logo-mini"><b>Project</b>Analyser</span>
+
+                <span class="logo-lg"><b>Project</b>ANALYSER</span>
+            </a>
+
+            <nav class="navbar navbar-static-top" role="navigation">
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+
+
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <div class="content-wrapper">
+            <section class="content-header">
+
+                <div class="box box-info" id="mainapp">
+                    <div class="box-header">
+                        <h3 class="box-title">Project Estimate Analyser</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+                        <input type="text" class="form-control" data-bind="value: projectName" placeholder="Project name" style="width: 97%; margin-bottom: 7px;" />
+
+                        <textarea type="text" class="form-control" data-bind="value: taskDescription" placeholder="Project description" style="width: 97%; height: 100px;" /></textarea><br>
+
+                        <button class="btn btn-flat btn-info" data-bind="click: toggleEditorMode, text: editorMode() == 'tableView' ? 'Switch into text mode' : 'Switch into table mode'"></button>
+
+                        <div data-bind="visible: editorMode() == 'tableView'">
+                            <table style="width: 100%; margin-top: 10px;">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <button type="button" data-bind="click: addTask" class="btn btn-primary btn-flat" title="Add a task" style="margin-top: -4px;">
+                                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                        </button>
+                                        <input type="text" class="form-control" name="newItemTitle" data-bind="value: estimate.newItemTitle, valueUpdate: 'input', event: { keypress: handleTaskKeypress }" placeholder="Task name" style="display: inline; width: 90%"/>
+                                        <input type="text" class="form-control" name="newItemEstimate" data-bind="value: estimate.newItemEstimate, valueUpdate: 'input', event: { keypress: handleTaskKeypress }" placeholder="Estimate"  style="display: inline; width: 70px"/>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <ul class="todo-list" data-bind="foreach: tasks">
+                                <li>
+                                    <div>
+                                        <input type="text" class="form-control" data-bind="value: title" name="title" style="display: inline; width: 92%; margin-left: 4px; margin-top: 7px"/>
+                                        <input type="text" class="form-control" data-bind="value: finalEstimate(), attr: { disabled: subTasks().length > 0 }" name="estimate" style="display: inline; width: 70px"/>
+
+                                        <a class="tools" style="margin-top: 7px" data-bind="click: $parent.removeTask">
+                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                        </a>
+                                    </div>
+
+                                    <div>
+                                        <button type="button" data-bind="click: function(data, event) { $parent.addSubTask($index(), data) }" class="btn btn-primary btn-flat" title="Add a task" style="margin-top: -4px;">
+                                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                        </button>
+                                        <input type="text" class="form-control" name="newSubItemTitle" data-bind="value: subEstimate.newItemTitle, valueUpdate: 'input'" placeholder="Subtask name" style="display: inline; width: 90%; margin-top: 7px;"/>
+                                        <input type="text" class="form-control" name="newSubItemEstimate" data-bind="value: subEstimate.newItemEstimate, valueUpdate: 'input'" placeholder="Estimate"  style="display: inline; width: 70px"/>
+                                    </div>
+
+                                    <ul class="todo-list" data-bind="foreach: subTasks">
+                                        <li>
+                                            <input type="text" class="form-control" data-bind="value: title" name="subTitle" style="display: inline; width: 92%; margin-left: 4px; margin-top: 7px"/>
+                                            <input type="text" class="form-control" data-bind="value: estimate" name="subEstimate" style="display: inline; width: 70px"/>
+
+                                            <a class="tools" style="margin-top: 7px" data-bind="click: function(data, event) { $parents[1].removeSubTask($index(), data) }">
+                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <p><b>Total time:</b> <span data-bind="text: totalEstimate()"></span></p>
+                        </div>
+
+                        <div data-bind="visible: editorMode() === 'textView'">
+                            <br>
+                            <textarea data-bind="value: textTasks" class="form-control" style="height: 300px;">
+
+                </textarea>
+                            <br>
+                        </div>
+
+                        <a data-bind="attr: { href: 'api/v1/generate-pdf.php?data=' + ko.toJSON(dataQueryString()) }"><button class="btn btn-flat btn-info">Generate PDF</button></a>
+                        <a data-bind="attr: { href: 'api/v1/save-json.php?data=' + ko.toJSON(dataQueryString()) }"><button class="btn btn-flat btn-info">Save JSON</button></a>
+
+                        <label class="btn btn-info btn-flat btn-file">
+                            Load JSON <input type="file" data-bind="value: fileToUpload, event: { change: function(data, event) { loadJson(event) } }">
+                        </label>
+                        <!-- /.box-body -->
+                    </div>
+
+
+                </div>
+            </section>
+
+            <section class="content">
+
+            </section>
+        </div>
+
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+
+            </div>
+
+            <strong>Copyright &copy; 2017</strong>
+        </footer>
+
+        <div class="control-sidebar-bg"></div>
+    </div>
+</div>
+
+<script src="dist/js/app.js"></script>
+
+</body>
+
+</html>

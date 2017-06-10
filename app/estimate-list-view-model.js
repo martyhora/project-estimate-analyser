@@ -37,10 +37,6 @@ class EstimateListViewModel
 
             return total
         });
-
-        this.dataQueryString = ko.computed(() => {
-            return { tasks: this.tasks, projectName: this.projectName, taskDescription: this.taskDescription }
-        })
     }
 
     addTask()

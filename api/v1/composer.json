@@ -2,5 +2,10 @@
     "require": {
         "mpdf/mpdf": "^6.1",
         "slim/slim": "^3.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "ProjectAnalyser\\": "ProjectAnalyser"
+        }
     }
 }

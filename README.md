@@ -7,6 +7,8 @@ The estimate can be saved in JSON format and loaded later.
 
 The application produces structured PDF with the final estimate.
 
+Frontend of the application is written in Knockout and backend in PHP.
+
 # Installation
 
 To run the project you will need Apache, PHP, Composer and NodeJs installed.

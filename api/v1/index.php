@@ -13,8 +13,7 @@ $estimateReport = new EstimateReport();
 $app->get('/pdf/{projectName}/{description}/{tasks}', function (Request $request, Response $response, $args) use ($estimateReport) {
     return $response->withHeader('Content-type', 'application/pdf')
                     ->withHeader('Content-disposition', 'attachment; filename=' . "{$args['projectName']} analysis.pdf")
-                    ->write($estimateReport->createPdf($args['projectName'], $args['description'], json_decode($args['tasks'])));
-
+                    ->write($estimateReport->createPdf($args['projectName'], $args['description'], json_decode(urldecode($args['tasks']), true)));
 });
 
 $app->get('/save-json/{projectName}/{description}/{tasks}', function (Request $request, Response $response, $args) {
